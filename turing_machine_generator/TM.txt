@@ -1,0 +1,32 @@
+q1
+Accept
+I
+I 1 $ # * _
+q1 I -> q2 I r
+q2 I -> q3 $ l
+q3 # -> q3 # l
+q3 $ -> q3 $ l
+q3 I -> q4 # r
+q3 _ -> q5 _ r
+q3 * -> q6 * r
+q3 1 -> q6 1 r
+q6 # -> q6 I r
+q6 $ -> q6 * r
+q6 I -> q7 $ r
+q6 _ -> q8 _ l
+q4 # -> q4 # r
+q4 $ -> q4 $ r
+q4 I -> q3 # l
+q4 _ -> q8 _ l
+q5 # -> q5 I r
+q5 $ -> q5 1 r
+q5 I -> q7 $ r
+q5 _ -> q8 _ l
+q7 _ -> qR _ l
+q7 I -> q3 I l
+q8 # -> q8 I l
+q8 $ -> q8 I l
+q8 * -> q8 I l
+q8 I -> q8 I l
+q8 1 -> q2 I r
+q8 _ -> Accept _ r

@@ -1,0 +1,14 @@
+arch: amd64
+os: linux
+dist: focal
+
+language: python
+python:
+  - "3.8"
+jobs:
+  include:
+    - stage: context-free grammar prime generator
+      script:
+        -cd turing_machine_generator/
+        -python prime_generator.py -n 30
+        -cd ..
