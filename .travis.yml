@@ -9,6 +9,6 @@ jobs:
   include:
     - stage: context-free grammar prime generator
       script:
-        -cd turing_machine_generator/
-        -python prime_generator.py -n 30
-        -cd ..
+        - cd turing_machine_generator/
+        - python prime_generator.py -n 30
+        - cd ..
