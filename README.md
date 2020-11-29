@@ -1,11 +1,11 @@
 # Prime numbers generator
-##Usage
-#####For context free grammar generating use:
+## Usage
+##### For context free grammar generating use:
 ```
 python cfg_generator.py
 ```
 From "/turing_machine_generator" folder
-#####To generate context free grammar with specific arguments use:
+##### To generate context free grammar with specific arguments use:
 ```
 usage: cfg_generator.py [-h] [-tm TURING_MACHINE_PATH] [-g GRAMMAR_PATH]
 
@@ -16,12 +16,12 @@ optional arguments:
   -g GRAMMAR_PATH, --grammar_path GRAMMAR_PATH
                         Output grammar path
 ```
-#####For prime numbers generating use:
+##### For prime numbers generating use:
 ```
 python prime_generator.py
 ```
 From "/turing_machine_generator" folder
-#####To start the prime number generator with specific arguments use:
+##### To start the prime number generator with specific arguments use:
 ```
 usage: prime_generator.py [-h] [-g GRAMMAR_PATH] [-n N]
 
