@@ -10,5 +10,5 @@ jobs:
     - stage: context-free grammar prime generator
       script:
         - cd turing_machine_generator/
-        - python prime_generator.py -n 30
+        - python prime_generator.py -n 25
         - cd ..
