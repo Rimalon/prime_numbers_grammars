@@ -16,6 +16,22 @@ optional arguments:
   -g GRAMMAR_PATH, --grammar_path GRAMMAR_PATH
                         Output grammar path
 ```
+##### For context-sensitive grammar generating use:
+```
+python csg_generator.py
+```
+From "/LBA_generator" folder
+##### To generate context-sensitive grammar with specific arguments use:
+```
+usage: csg_generator.py [-h] [-lba LBA_PATH] [-g GRAMMAR_PATH]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -tm TURING_MACHINE_PATH, --lba_path LBA_PATH
+                        Path to lba file
+  -g GRAMMAR_PATH, --grammar_path GRAMMAR_PATH
+                        Output grammar path
+```
 ##### For prime numbers generating use:
 ```
 python prime_generator.py
