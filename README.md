@@ -27,7 +27,7 @@ usage: csg_generator.py [-h] [-lba LBA_PATH] [-g GRAMMAR_PATH]
 
 optional arguments:
   -h, --help            show this help message and exit
-  -tm TURING_MACHINE_PATH, --lba_path LBA_PATH
+  -lba LBA_PATH, --lba_path LBA_PATH
                         Path to lba file
   -g GRAMMAR_PATH, --grammar_path GRAMMAR_PATH
                         Output grammar path
