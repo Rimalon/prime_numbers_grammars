@@ -67,7 +67,7 @@ def save_grammar(path, productions):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-tm", "--turing_machine_path", help="Path to turing machine file", required=False, type=str, default="./TM.txt")
-    parser.add_argument("-g", "--grammar_path", help="Output grammar path", required=False, type=str, default="./cfg_prime_grammar.txt")
+    parser.add_argument("-g", "--grammar_path", help="Output grammar path", required=False, type=str, default="./free_prime_grammar.txt")
     args = parser.parse_args()
 
     input_symbols, type_symbols, transition_function, init_state, accept_state = parse_turing_machine(args.turing_machine_path)

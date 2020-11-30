@@ -35,7 +35,7 @@ def read_free_grammar(path):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-g", "--grammar_path", help="Path to file with grammar",
-                        type=str, default="./cfg_prime_grammar.txt")
+                        type=str, default="./free_prime_grammar.txt")
     parser.add_argument("-n", help="Prime numbers amount", default=10, type=int)
     args = parser.parse_args()
 

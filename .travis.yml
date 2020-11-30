@@ -7,7 +7,7 @@ python:
   - "3.8"
 jobs:
   include:
-    - stage: context-free grammar prime generator
+    - stage: free grammar prime generator
       script:
         - cd turing_machine_generator/
         - python prime_generator.py -n 25

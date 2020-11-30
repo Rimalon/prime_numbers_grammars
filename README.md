@@ -1,13 +1,13 @@
 # Prime numbers generator
 ## Usage
-##### For context free grammar generating use:
+##### For free grammar generating use:
 ```
-python cfg_generator.py
+python free_grammar_generator.py
 ```
 From "/turing_machine_generator" folder
-##### To generate context free grammar with specific arguments use:
+##### To generate free grammar with specific arguments use:
 ```
-usage: cfg_generator.py [-h] [-tm TURING_MACHINE_PATH] [-g GRAMMAR_PATH]
+usage: free_grammar_generator.py [-h] [-tm TURING_MACHINE_PATH] [-g GRAMMAR_PATH]
 
 optional arguments:
   -h, --help            show this help message and exit
