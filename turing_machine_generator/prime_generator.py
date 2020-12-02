@@ -2,19 +2,35 @@ import argparse
 from collections import deque
 
 
-def word_generator(productions, init_symbol_1, init_symbol_2, input_symbol):
+def word_generator(productions, init_symbol_1, init_symbol_2, input_symbol, counter):
     q = deque([init_symbol_1])
     st = set()
+    c = 1
+    productions_list = list()
+    result_productions_dict = dict()
     while len(q):
         word = q.popleft()
         if word not in st:
             st.add(word)
             if all(c == input_symbol for c in word):
+                if counter != c:
+                    c += 1
+                else:
+                    prime_number_word = word
+                    result_productions_dict[prime_number_word] = ''
+                    productions_list.reverse()
+                    for lp, rp in productions_list:
+                        if rp in result_productions_dict.keys():
+                            result_productions_dict[lp] = rp
+                    result_file = open('./prime_generator_result.txt', 'w')
+                    for key, value in result_productions_dict.items().__reversed__():
+                        result_file.write(key + ' -> ' + value + '\n')
                 yield word
             else:
                 for left, right in productions:
                     if left in word:
                         new_word = word.replace(left, right)
+                        productions_list.append((word, new_word))
                         if any(S in new_word for S in [init_symbol_1, init_symbol_2]):
                             q.append(new_word)
                         else:
@@ -40,7 +56,7 @@ def main():
     args = parser.parse_args()
 
     productions = read_free_grammar(args.grammar_path)
-    gen = word_generator(productions, 'First', 'Second', 'I')
+    gen = word_generator(productions, 'First', 'Second', 'I', args.n)
 
     for i in range(args.n):
         print(len(gen.__next__()))

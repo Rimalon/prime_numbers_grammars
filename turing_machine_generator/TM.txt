@@ -1,5 +1,5 @@
 q1
-Accept
+Ac
 I
 I 1 $ # * _
 q1 I -> q2 I r
@@ -29,4 +29,4 @@ q8 $ -> q8 I l
 q8 * -> q8 I l
 q8 I -> q8 I l
 q8 1 -> q2 I r
-q8 _ -> Accept _ r
+q8 _ -> Ac _ r
