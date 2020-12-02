@@ -10,5 +10,5 @@ jobs:
     - stage: free grammar prime generator
       script:
         - cd turing_machine_generator/
-        - python prime_generator.py -n 25
-        - cd ..
+        - python prime_generator.py -n 8
+        - cat ./prime_generator_result.txt
