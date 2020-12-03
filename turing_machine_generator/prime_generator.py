@@ -8,6 +8,7 @@ def word_generator(productions, init_symbol_1, init_symbol_2, input_symbol, coun
     c = 1
     productions_list = list()
     result_productions_dict = dict()
+    result_rules_dict = dict()
     while len(q):
         word = q.popleft()
         if word not in st:
@@ -18,19 +19,21 @@ def word_generator(productions, init_symbol_1, init_symbol_2, input_symbol, coun
                 else:
                     prime_number_word = word
                     result_productions_dict[prime_number_word] = ''
+                    result_rules_dict[prime_number_word] = 'Word was applied'
                     productions_list.reverse()
-                    for lp, rp in productions_list:
+                    for lp, rp, left, right in productions_list:
                         if rp in result_productions_dict.keys():
                             result_productions_dict[lp] = rp
+                            result_rules_dict[lp] = left + ' -> ' + right
                     result_file = open('./prime_generator_result.txt', 'w')
                     for key, value in result_productions_dict.items().__reversed__():
-                        result_file.write(key + ' -> ' + value + '\n')
+                        result_file.write('Applied rule: ' + result_rules_dict[key] + '\nResult replacement: ' + key + ' -> ' + value + '\n\n')
                 yield word
             else:
                 for left, right in productions:
                     if left in word:
                         new_word = word.replace(left, right)
-                        productions_list.append((word, new_word))
+                        productions_list.append((word, new_word, left, right))
                         if any(S in new_word for S in [init_symbol_1, init_symbol_2]):
                             q.append(new_word)
                         else:
