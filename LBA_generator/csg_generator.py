@@ -1,213 +1,246 @@
 import argparse
-from itertools import product
+import os
 
 
-def parse_LBA(path):
-    lba = open(path)
+def parse_LBA(path, save_path):
+    lineList = [line.rstrip('\n') for line in open(path, "r")]
+    init = lineList[0].split()[1]
+    accept = lineList[1].split()[1]
+    sigma = lineList[2].replace("sigma: {", "").replace(
+        "}", "").replace(" ", "").split(",")
+    gamma = lineList[3].replace("gamma: {", "").replace(
+        "}", "").replace(" ", "").split(",") + sigma
 
-    init_state = lba.readline().replace("init: ", "").strip()
-    accept_state = lba.readline().replace("accept: ", "").strip()
+    curLine = 5
+    delta = []
+    while curLine < len(lineList):
+        if lineList[curLine] == "" or lineList[curLine][0] == "/":
+            curLine += 1
+            continue
+        delta.append(lineList[curLine].replace(" ", "").split(
+            ",") + lineList[curLine + 1].replace(" ", "").split(","))
+        curLine += 3
 
-    sigma = lba.readline().replace("sigma: {", "").replace("}", "").strip().split(", ")
-    gamma = lba.readline().replace("gamma: {", "").replace("}", "").strip().split(", ")
-
-    lines = list(filter(lambda s: s != '\n', lba.readlines()))
-    lines = list(map(lambda s: s.strip().split(","), lines))
-
-    transition_function = {}
-    left = map(tuple, lines[::2])
-    right = map(tuple, lines[1::2])
-    for l, r in zip(left, right):
-        if l in transition_function.keys():
-            transition_function[l] += [r]
-        else:
-            transition_function.update({l: [r]})
-
-    lba.close()
-
-    return sigma, gamma, transition_function, init_state, accept_state
-
-
-def init_config_single(sigma, init_state, init_symbol):
-    return [(init_symbol, f'[{init_state},$,{a},{a},#]') for a in sigma]
-
-
-def movement_config_single(sigma, gamma, transition_function, accept_state):
-    productions = []
+    rules = []
+    # 1+4
     for a in sigma:
-        for left, rights in transition_function.items():
-            q, x = left
-            if q != accept_state:
-                for right in rights:
-                    p, y, d = right
-                    if y == '$' and x == '$' and d == '>':
-                        for g in gamma:
-                            l_rule = f'[{q},$,{x},{a},#]'
-                            r_rule = f'[$,{p},{x},{a},#]'
-                            productions.append((l_rule, r_rule))
-                    elif y == '#' and x == '#' and d == '<':
-                        for g in gamma:
-                            l_rule = f'[$,{g},{a},{q},#]'
-                            r_rule = f'[$,{p},{g},{a},#]'
-                            productions.append((l_rule, r_rule))
-                    elif d == '<':
-                        l_rule = f'[$,{q},{x},{a},#]'
-                        r_rule = f'[{p},$,{y},{a},#]'
-                        productions.append((l_rule, r_rule))
-                    elif d == '>':
-                        l_rule = f'[$,{q},{x},{a},#]'
-                        r_rule = f'[$,{y},{a},{p},#]'
-                        productions.append((l_rule, r_rule))
-
-    return productions
-
-
-def restore_word_accept(sigma, gamma, accept_state):
-    productions = []
+        rules.append((["A_1"], ["[" + init + ", #, " + a + ", " + a + ", #]"]))
+        rules.append((["A_1"], ["[" + init + ", #, " + a + ", " + a + "]", "A_2"]))
+        rules.append((["A_2"], ["[" + a + ", " + a + "]", "A_2"]))
+        rules.append((["A_2"], ["[" + a + ", " + a + ", #]"]))
+    # 2
+    for de in delta:
+        for a in sigma:
+            if de[4] == ">":
+                if de[1] == "#":
+                    for e in gamma:
+                        rules.append((["[" + de[0] + ", #, " + e + ", " + a + ", #]"],  # 2.1
+                                      ["[#, " + de[2] + ", " + e + ", " + a + ", #]"]))
+                else:
+                    rules.append((["[#, " + de[0] + ", " + de[1] + ", " + a + ", #]"],  # 2.3
+                                  ["[#, " + de[3] + ", " + a + ", " + de[2] + ", #]"]))
+            else:
+                if de[1] == "#":
+                    for e in gamma:
+                        rules.append((["[#, " + e + ", " + a + ", " + de[0] + ", #]"],  # 2.4
+                                      ["[#, " + de[2] + ", " + e + ", " + a + ", #]"]))
+                else:
+                    rules.append((["[#, " + de[0] + ", " + de[1] + ", " + a + ", #]"],  # 2.2
+                                  ["[" + de[2] + ", #, " + de[3] + ", " + a + ", #]"]))
+    # 3
     for a in sigma:
-        for g in gamma:
-            productions.append((f'[{accept_state},$,{g},{a},#]', a))
-            productions.append((f'[$,{accept_state},{g},{a},#]', a))
-            productions.append((f'[$,{g},{a},{accept_state},#]', a))
-    return productions
+        for x in gamma:
+            rules.append((["[" + accept + ", #, " + x + ", " + a + ", #]"],
+                          [a]))
+            rules.append((["[#, " + accept + ", " + x + ", " + a + ", #]"],
+                          [a]))
+            rules.append((["[#, " + x + ", " + a + ", " + accept + ", #]"],
+                          [a]))
 
-
-def init_config_general(sigma, init_state, init_symbol_1, init_symbol_2):
-    productions = []
+    # 5
+    for de in delta:
+        for a in sigma:
+            if de[4] == ">":
+                if de[1] == "#":
+                    for e in gamma:
+                        rules.append((["[" + de[0] + ", #, " + e + ", " + a + "]"],
+                                      ["[#, " + de[2] + ", " + e + ", " + a + "]"]))
+                else:
+                    for z in gamma:
+                        for b in sigma:
+                            rules.append((["[#, " + de[0] + ", " + de[1] + ", " + a + "]", "[" + z + ", " + b + "]"],
+                                          ["[#, " + de[3] + ", " + a + "]", "[" + de[2] + ", " + z + ", " + b + "]"]))
+                            rules.append(
+                                (["[#, " + de[0] + ", " + de[1] + ", " + a + "]", "[" + z + ", " + b + ", #]"],
+                                 ["[#, " + de[3] + ", " + a + "]", "[" + de[2] + ", " + z + ", " + b + ", #]"]))
+            else:
+                rules.append((["[#, " + de[0] + ", " + de[1] + ", " + a + "]"],
+                              ["[" + de[2] + ", #, " + de[3] + ", " + a + "]"]))
+    # 6
+    for de in delta:
+        for a in sigma:
+            for b in sigma:
+                if de[4] == ">":
+                    for z in gamma:
+                        rules.append((["[" + de[0] + ", " + de[1] + ", " + a + "]", "[" + z + ", " + b + "]"],
+                                      ["[" + de[3] + ", " + a + "]", "[" + de[2] + ", " + z + ", " + b + "]"]))
+                        rules.append((["[" + de[0] + ", " + de[1] + ", " + a + "]", "[" + z + ", " + b + ", #]"],
+                                      ["[" + de[3] + ", " + a + "]", "[" + de[2] + ", " + z + ", " + b + ", #]"]))
+                else:
+                    for z in gamma:
+                        rules.append((["[" + z + ", " + b + "]", "[" + de[0] + ", " + de[1] + ", " + a + "]"],
+                                      ["[" + de[2] + ", " + z + ", " + b + "]", "[" + de[3] + ", " + a + "]"]))
+                        rules.append((["[#, " + z + ", " + b + "]", "[" + de[0] + ", " + de[1] + ", " + a + "]"],
+                                      ["[#, " + de[2] + ", " + z + ", " + b + "]", "[" + de[3] + ", " + a + "]"]))
+    # 7
+    for de in delta:
+        for a in sigma:
+            if de[4] == ">":
+                rules.append((["[" + de[0] + ", " + de[1] + ", " + a + ", #]"],
+                              ["[" + de[3] + ", " + a + ", " + de[2] + ", #]"]))
+            else:
+                if de[1] == "#":
+                    for e in gamma:
+                        rules.append((["[" + e + ", " + a + ", " + de[0] + ", #]"],
+                                      ["[" + de[2] + ", " + e + ", " + a + ", #]"]))
+                else:
+                    for z in gamma:
+                        for b in sigma:
+                            rules.append((["[" + z + ", " + b + "]", "[" + de[0] + ", " + de[1] + ", " + a + ", #]"],
+                                          ["[" + de[2] + ", " + z + ", " + b + "]", "[" + de[3] + ", " + a + ", #]"]))
+    # 8
     for a in sigma:
-        productions.append((init_symbol_1, f'[{init_state},$,{a},{a}]{init_symbol_2}'))
-        productions.append((init_symbol_2, f'[{a},{a}]{init_symbol_2}'))
-        productions.append((init_symbol_2, f'[{a},{a},#]'))
-    return productions
-
-
-def movement_config_left(sigma, gamma, transition_function, accept_state):
-    productions = []
+        for x in gamma:
+            rules.append((["[" + accept + ", #, " + x + ", " + a + "]"],
+                          [a]))
+            rules.append((["[#, " + accept + ", " + x + ", " + a + "]"],
+                          [a]))
+            rules.append((["[" + accept + ", " + x + ", " + a + "]"],
+                          [a]))
+            rules.append((["[" + accept + ", " + x + ", " + a + ", #]"],
+                          [a]))
+            rules.append((["[" + x + ", " + a + ", " + accept + ", #]"],
+                          [a]))
+    # 9
     for a in sigma:
-        for left, rights in transition_function.items():
-            q, x = left
-            if q != accept_state:
-                for right in rights:
-                    p, y, d = right
-                    if y == '$' and x == '$' and d == '>':
-                        for g in gamma:
-                            productions.append(
-                                (f'[{q},$,{g},{a}]', f'[$,{p},{g},{a}]'))
-                    elif d == '<':
-                        productions.append((f'[$,{q},{x},{a}]', f'[{p},$,{y},{a}]'))
-                    elif d == '>':
-                        for z, b in product(gamma, sigma):
-                            l_rule = f'[$,{q},{x},{a}][{z},{b}]'
-                            r_rule = f'[$,{y},{a}][{p},{z},{b}]'
-                            productions.append((l_rule, r_rule))
+        for b in sigma:
+            for x in gamma:
+                rules.append(([a, "[" + x + ", " + b + "]"],
+                              [a, b]))
+                rules.append(([a, "[" + x + ", " + b + ", #]"],
+                              [a, b]))
+                rules.append((["[" + x + ", " + a + "]", b],
+                              [a, b]))
+                rules.append((["[#, " + x + ", " + a + "]", b],
+                              [a, b]))
 
-                            l_rule = f'[$,{q},{x},{a}][{z},{b},#]'
-                            r_rule = f'[$,{y},{a}][{p},{z},{b},#]'
-                            productions.append((l_rule, r_rule))
-    return productions
+    bufferFile = "grammar_tmp_lba.txt"
+    tmp = open(bufferFile, "w")
 
+    tmp.write(lineList[2] + "\n")  # sigma
+    for a, b in rules:
+        if "" in a:
+            a.remove("")
+        if "" in b:
+            b.remove("")
+        s1 = str(a)[1:-1] + " -> " + str(b)[1:-1]
+        tmp.write(s1 + "\n")
+    tmp.close()
 
-def movement_config_center(sigma, gamma, transition_function, accept_state):
-    productions = []
-    for a in sigma:
-        for left, rights in transition_function.items():
-            q, x = left
-            if q != accept_state:
-                for right in rights:
-                    p, y, d = right
-                    if x in gamma and y in gamma:
-                        for z, b in product(gamma, sigma):
-                            if d == '>':
-                                l_rule = f'[{q},{x},{a}][{z},{b}]'
-                                r_rule = f'[{y},{a}][{p},{z},{b}]'
-                                productions.append((l_rule, r_rule))
+    def converter(pair):
+        pair4 = []
+        for el in pair:
+            pair2 = el.split("', ")
+            pair3 = []
+            for el2 in pair2:
+                pair3.append(el2.replace("'", ""))
+            pair4.append(tuple(pair3))
+        return pair4
 
-                                l_rule = f'[{q},{x},{a}][{z},{b},#]'
-                                r_rule = f'[{y},{a}][{p},{z},{b},#]'
-                                productions.append((l_rule, r_rule))
-                            else:
-                                l_rule = f'[{z},{b}][{q},{x},{a}]'
-                                r_rule = f'[{p},{z},{b}][{y},{a}]'
-                                productions.append((l_rule, r_rule))
+    lineList = [line.rstrip('\n') for line in open(bufferFile, "r")]
 
-                                l_rule = f'[$,{z},{b}][{q},{x},{a}]'
-                                r_rule = f'[$,{p},{z},{b}][{y},{a}]'
-                                productions.append((l_rule, r_rule))
+    sigma = lineList[0].replace("sigma: {", "").replace(
+        "}", "").replace(" ", "").split(",")
 
-    return productions
+    lineList.pop(0)
+    rules = [converter(line.split(" -> ")) for line in lineList]
 
+    size = 7
+    numOfStage1Commands = 4
+    activeRules = set()
+    q = []
+    stage2 = []
+    tmp = set()
+    q.append(["A_1"])
+    while q:
+        word = q.pop(0)
+        if tuple(word) in tmp:
+            continue
+        tmp.add(tuple(word))
+        is_terminal = True
+        for i in range(len(word)):
+            if word[i] in ["A_1", "A_2", "A_3", "A_4"]:
+                is_terminal = False
+            for ix, rule in enumerate(rules[:numOfStage1Commands]):
+                flag = True
+                for j in range(len(rule[0])):
+                    if i + j >= len(word) or word[i + j] != rule[0][j]:
+                        flag = False
+                        break
+                if flag:
+                    activeRules.add(ix)
+                    newWord = word.copy()
+                    for j in range(len(rule[0])):
+                        newWord.pop(i)
+                    for j in range(len(rule[1])):
+                        if rule[1][len(rule[1]) - j - 1] != "":
+                            newWord.insert(i, rule[1][len(rule[1]) - j - 1])
+                    if len(newWord) <= size:
+                        q.append(newWord)
 
-def movement_config_right(sigma, gamma, transition_function, accept_state):
-    productions = []
-    for a in sigma:
-        for left, rights in transition_function.items():
-            q, x = left
-            if q != accept_state:
-                for right in rights:
-                    p, y, d = right
-                    if y == '#' and x == '#' and d == '<':
-                        for g in gamma:
-                            productions.append(
-                                (f'[{g},{a},{q},#]', f'[{p},{g},{a},#]'))
-                    elif d == '>':
-                        productions.append(
-                            (f'[{q},{x},{a},#]', f'[{y},{a},{p},#]'))
-                    elif d == '<':
-                        for z, b in product(gamma, sigma):
-                            l_rule = f'[{z},{b}][{q},{x},{a},#]'
-                            r_rule = f'[{p},{z},{b}][{y},{a},#]'
-                            productions.append((l_rule, r_rule))
+        if is_terminal:
+            stage2.append(word)
+    # for i in stage2:
+    #     print(i)
+    st = set()
+    while stage2:
+        word = stage2.pop(0)
+        if tuple(word) in st:
+            continue
+        st.add(tuple(word))
+        is_terminal = True
+        for i in range(len(word)):
+            if word[i] not in sigma:
+                is_terminal = False
+            for ix, rule in enumerate(rules[numOfStage1Commands:]):
+                flag = True
+                for j in range(len(rule[0])):
+                    if i + j >= len(word) or word[i + j] != rule[0][j]:
+                        flag = False
+                        break
+                if flag:
+                    activeRules.add(ix + numOfStage1Commands)
+                    newWord = word.copy()
+                    for j in range(len(rule[0])):
+                        newWord.pop(i)
+                    for j in range(len(rule[1])):
+                        if rule[1][len(rule[1]) - j - 1] != "":
+                            newWord.insert(i, rule[1][len(rule[1]) - j - 1])
+                    stage2.append(newWord)
+                    # print(newWord)
+        # if is_terminal:
+        #     for i in word:
+        #         print(i, end = "")
+        #     print()
+    out = open(save_path, "w")
+    lineList = [line.rstrip('\n') for line in open(bufferFile, "r")]
+    out.write(lineList[0] + "\n")
+    for ix, rule in enumerate(lineList):
+        if ix - 1 in activeRules:
+            out.write(rule + "\n")
 
-                            l_rule = f'[$,{z},{b}][{q},{x},{a},#]'
-                            r_rule = f'[$,{p},{z},{b}][{y},{a},#]'
-                            productions.append((l_rule, r_rule))
-    return productions
-
-
-def restore_word_accepted(sigma, gamma, accept_state):
-    productions = []
-    for x, a in product(gamma, sigma):
-        productions.append((f'[{accept_state},$,{x},{a}]', a))
-        productions.append((f'[$,{accept_state},{x},{a}]', a))
-        productions.append((f'[{accept_state},{x},{a}]', a))
-        productions.append((f'[{accept_state},{x},{a},#]', a))
-        productions.append((f'[{x},{a},{accept_state},#]', a))
-    return productions
-
-
-def restore_word_general(sigma, gamma):
-    productions = []
-    for x, a, b in product(gamma, sigma, sigma):
-        productions.append((f'{a}[{x},{b}]', f'{a}{b}'))
-        productions.append((f'{a}[{x},{b},#]', f'{a}{b}'))
-        productions.append((f'[{x},{a}]{b}', f'{a}{b}'))
-        productions.append((f'[$,{x},{a}]{b}', f'{a}{b}'))
-    return productions
-
-
-def build_cs_grammar(sigma, gamma, transition_function, init_state, accept_state):
-    gamma += sigma
-    first = 'First'
-    second = 'Second'
-
-    productions = init_config_single(sigma, init_state, first)
-    productions += movement_config_single(sigma, gamma, transition_function, accept_state)
-    productions += restore_word_accept(sigma, gamma, accept_state)
-    productions += init_config_general(sigma, init_state, first, second)
-    productions += movement_config_left(sigma, gamma, transition_function, accept_state)
-    productions += movement_config_center(sigma, gamma, transition_function, accept_state)
-    productions += movement_config_right(sigma, gamma, transition_function, accept_state)
-    productions += restore_word_accepted(sigma, gamma, accept_state)
-    productions += restore_word_general(sigma, gamma)
-
-    return productions, first
-
-
-def save_grammar(path, productions, sigma):
-    grammar = open(path, 'w')
-    grammar.write(str(*sigma) + ' $ #\n')
-    grammar.writelines(sorted(left + " -> " + right + '\n' for left, right in productions))
-    grammar.close()
+    out.close()
+    os.remove("grammar_tmp_lba.txt")
 
 
 def main():
@@ -217,10 +250,7 @@ def main():
                         type=str, default="./csg_prime_grammar.txt")
     args = parser.parse_args()
 
-    sigma, gamma, transition_function, init_state, accept_state = parse_LBA(args.lba_path)
-    productions, init_symbol = build_cs_grammar(sigma, gamma, transition_function, init_state, accept_state)
-
-    save_grammar(args.grammar_path, productions, sigma)
+    parse_LBA(args.lba_path, args.grammar_path)
 
 
 if __name__ == '__main__':
