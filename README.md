@@ -32,11 +32,11 @@ optional arguments:
   -g GRAMMAR_PATH, --grammar_path GRAMMAR_PATH
                         Output grammar path
 ```
-##### For prime numbers generating use:
+##### For prime numbers generating by T0 use:
 ```
 python prime_generator.py
 ```
-From "/turing_machine_generator" folder
+From "/turing_machine_generator" folder to generate 10 first prime numbers
 ##### To start the prime number generator with specific arguments use:
 ```
 usage: prime_generator.py [-h] [-g GRAMMAR_PATH] [-n N]
@@ -47,3 +47,20 @@ optional arguments:
                         Path to file with grammar
   -n N                  Prime numbers amount
 ```
+File with last word output is in prime_generator_result.txt file
+##### For prime numbers check by T0 use:
+```
+python prime_checker.py -n N
+```
+From "/turing_machine_generator" folder and N is a number to check
+##### To start the prime number generator with specific arguments use:
+```
+usage: prime_checker.py [-h] [-g GRAMMAR_PATH] [-n N]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -g GRAMMAR_PATH, --grammar_path GRAMMAR_PATH
+                        Path to file with grammar
+  -n N                  Number to check
+```
+File with word output is in prime_checker_result.txt file
