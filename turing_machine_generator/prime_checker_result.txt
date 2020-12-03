@@ -1,0 +1,261 @@
+Applied rule: First -> [,_]q1Second[,_][,_]
+Result replacement: First -> [,_]q1Second[,_][,_]
+
+Applied rule: Second -> [I,I]Second
+Result replacement: [,_]q1Second[,_][,_] -> [,_]q1[I,I]Second[,_][,_]
+
+Applied rule: Second -> [I,I]Second
+Result replacement: [,_]q1[I,I]Second[,_][,_] -> [,_]q1[I,I][I,I]Second[,_][,_]
+
+Applied rule: Second -> [I,I]Second
+Result replacement: [,_]q1[I,I][I,I]Second[,_][,_] -> [,_]q1[I,I][I,I][I,I]Second[,_][,_]
+
+Applied rule: Second -> [I,I]Second
+Result replacement: [,_]q1[I,I][I,I][I,I]Second[,_][,_] -> [,_]q1[I,I][I,I][I,I][I,I]Second[,_][,_]
+
+Applied rule: Second -> [I,I]Second
+Result replacement: [,_]q1[I,I][I,I][I,I][I,I]Second[,_][,_] -> [,_]q1[I,I][I,I][I,I][I,I][I,I]Second[,_][,_]
+
+Applied rule: Second -> 
+Result replacement: [,_]q1[I,I][I,I][I,I][I,I][I,I]Second[,_][,_] -> [,_]q1[I,I][I,I][I,I][I,I][I,I][,_][,_]
+
+Applied rule: q1[I,I] -> [I,I]q2
+Result replacement: [,_]q1[I,I][I,I][I,I][I,I][I,I][,_][,_] -> [,_][I,I]q2[I,I][I,I][I,I][I,I][,_][,_]
+
+Applied rule: [I,I]q2[I,I] -> q3[I,I][I,$]
+Result replacement: [,_][I,I]q2[I,I][I,I][I,I][I,I][,_][,_] -> [,_]q3[I,I][I,$][I,I][I,I][I,I][,_][,_]
+
+Applied rule: q3[I,I] -> [I,#]q4
+Result replacement: [,_]q3[I,I][I,$][I,I][I,I][I,I][,_][,_] -> [,_][I,#]q4[I,$][I,I][I,I][I,I][,_][,_]
+
+Applied rule: q4[I,$] -> [I,$]q4
+Result replacement: [,_][I,#]q4[I,$][I,I][I,I][I,I][,_][,_] -> [,_][I,#][I,$]q4[I,I][I,I][I,I][,_][,_]
+
+Applied rule: [I,$]q4[I,I] -> q3[I,$][I,#]
+Result replacement: [,_][I,#][I,$]q4[I,I][I,I][I,I][,_][,_] -> [,_][I,#]q3[I,$][I,#][I,I][I,I][,_][,_]
+
+Applied rule: [I,#]q3[I,$] -> q3[I,#][I,$]
+Result replacement: [,_][I,#]q3[I,$][I,#][I,I][I,I][,_][,_] -> [,_]q3[I,#][I,$][I,#][I,I][I,I][,_][,_]
+
+Applied rule: [,_]q3[I,#] -> q3[,_][I,#]
+Result replacement: [,_]q3[I,#][I,$][I,#][I,I][I,I][,_][,_] -> q3[,_][I,#][I,$][I,#][I,I][I,I][,_][,_]
+
+Applied rule: q3[,_] -> [,_]q5
+Result replacement: q3[,_][I,#][I,$][I,#][I,I][I,I][,_][,_] -> [,_]q5[I,#][I,$][I,#][I,I][I,I][,_][,_]
+
+Applied rule: q5[I,#] -> [I,I]q5
+Result replacement: [,_]q5[I,#][I,$][I,#][I,I][I,I][,_][,_] -> [,_][I,I]q5[I,$][I,#][I,I][I,I][,_][,_]
+
+Applied rule: q5[I,$] -> [I,1]q5
+Result replacement: [,_][I,I]q5[I,$][I,#][I,I][I,I][,_][,_] -> [,_][I,I][I,1]q5[I,#][I,I][I,I][,_][,_]
+
+Applied rule: q5[I,#] -> [I,I]q5
+Result replacement: [,_][I,I][I,1]q5[I,#][I,I][I,I][,_][,_] -> [,_][I,I][I,1][I,I]q5[I,I][I,I][,_][,_]
+
+Applied rule: q5[I,I] -> [I,$]q7
+Result replacement: [,_][I,I][I,1][I,I]q5[I,I][I,I][,_][,_] -> [,_][I,I][I,1][I,I][I,$]q7[I,I][,_][,_]
+
+Applied rule: [I,$]q7[I,I] -> q3[I,$][I,I]
+Result replacement: [,_][I,I][I,1][I,I][I,$]q7[I,I][,_][,_] -> [,_][I,I][I,1][I,I]q3[I,$][I,I][,_][,_]
+
+Applied rule: [I,I]q3[I,$] -> q3[I,I][I,$]
+Result replacement: [,_][I,I][I,1][I,I]q3[I,$][I,I][,_][,_] -> [,_][I,I][I,1]q3[I,I][I,$][I,I][,_][,_]
+
+Applied rule: q3[I,I] -> [I,#]q4
+Result replacement: [,_][I,I][I,1]q3[I,I][I,$][I,I][,_][,_] -> [,_][I,I][I,1][I,#]q4[I,$][I,I][,_][,_]
+
+Applied rule: q4[I,$] -> [I,$]q4
+Result replacement: [,_][I,I][I,1][I,#]q4[I,$][I,I][,_][,_] -> [,_][I,I][I,1][I,#][I,$]q4[I,I][,_][,_]
+
+Applied rule: [I,$]q4[I,I] -> q3[I,$][I,#]
+Result replacement: [,_][I,I][I,1][I,#][I,$]q4[I,I][,_][,_] -> [,_][I,I][I,1][I,#]q3[I,$][I,#][,_][,_]
+
+Applied rule: [I,#]q3[I,$] -> q3[I,#][I,$]
+Result replacement: [,_][I,I][I,1][I,#]q3[I,$][I,#][,_][,_] -> [,_][I,I][I,1]q3[I,#][I,$][I,#][,_][,_]
+
+Applied rule: [I,1]q3[I,#] -> q3[I,1][I,#]
+Result replacement: [,_][I,I][I,1]q3[I,#][I,$][I,#][,_][,_] -> [,_][I,I]q3[I,1][I,#][I,$][I,#][,_][,_]
+
+Applied rule: q3[I,1] -> [I,1]q6
+Result replacement: [,_][I,I]q3[I,1][I,#][I,$][I,#][,_][,_] -> [,_][I,I][I,1]q6[I,#][I,$][I,#][,_][,_]
+
+Applied rule: q6[I,#] -> [I,I]q6
+Result replacement: [,_][I,I][I,1]q6[I,#][I,$][I,#][,_][,_] -> [,_][I,I][I,1][I,I]q6[I,$][I,#][,_][,_]
+
+Applied rule: q6[I,$] -> [I,*]q6
+Result replacement: [,_][I,I][I,1][I,I]q6[I,$][I,#][,_][,_] -> [,_][I,I][I,1][I,I][I,*]q6[I,#][,_][,_]
+
+Applied rule: q6[I,#] -> [I,I]q6
+Result replacement: [,_][I,I][I,1][I,I][I,*]q6[I,#][,_][,_] -> [,_][I,I][I,1][I,I][I,*][I,I]q6[,_][,_]
+
+Applied rule: [I,I]q6[,_] -> q8[I,I][,_]
+Result replacement: [,_][I,I][I,1][I,I][I,*][I,I]q6[,_][,_] -> [,_][I,I][I,1][I,I][I,*]q8[I,I][,_][,_]
+
+Applied rule: [I,*]q8[I,I] -> q8[I,*][I,I]
+Result replacement: [,_][I,I][I,1][I,I][I,*]q8[I,I][,_][,_] -> [,_][I,I][I,1][I,I]q8[I,*][I,I][,_][,_]
+
+Applied rule: [I,I]q8[I,*] -> q8[I,I][I,I]
+Result replacement: [,_][I,I][I,1][I,I]q8[I,*][I,I][,_][,_] -> [,_][I,I][I,1]q8[I,I][I,I][I,I][,_][,_]
+
+Applied rule: [I,1]q8[I,I] -> q8[I,1][I,I]
+Result replacement: [,_][I,I][I,1]q8[I,I][I,I][I,I][,_][,_] -> [,_][I,I]q8[I,1][I,I][I,I][I,I][,_][,_]
+
+Applied rule: q8[I,1] -> [I,I]q2
+Result replacement: [,_][I,I]q8[I,1][I,I][I,I][I,I][,_][,_] -> [,_][I,I][I,I]q2[I,I][I,I][I,I][,_][,_]
+
+Applied rule: [I,I]q2[I,I] -> q3[I,I][I,$]
+Result replacement: [,_][I,I][I,I]q2[I,I][I,I][I,I][,_][,_] -> [,_][I,I]q3[I,I][I,$][I,I][I,I][,_][,_]
+
+Applied rule: q3[I,I] -> [I,#]q4
+Result replacement: [,_][I,I]q3[I,I][I,$][I,I][I,I][,_][,_] -> [,_][I,I][I,#]q4[I,$][I,I][I,I][,_][,_]
+
+Applied rule: q4[I,$] -> [I,$]q4
+Result replacement: [,_][I,I][I,#]q4[I,$][I,I][I,I][,_][,_] -> [,_][I,I][I,#][I,$]q4[I,I][I,I][,_][,_]
+
+Applied rule: [I,$]q4[I,I] -> q3[I,$][I,#]
+Result replacement: [,_][I,I][I,#][I,$]q4[I,I][I,I][,_][,_] -> [,_][I,I][I,#]q3[I,$][I,#][I,I][,_][,_]
+
+Applied rule: [I,#]q3[I,$] -> q3[I,#][I,$]
+Result replacement: [,_][I,I][I,#]q3[I,$][I,#][I,I][,_][,_] -> [,_][I,I]q3[I,#][I,$][I,#][I,I][,_][,_]
+
+Applied rule: [I,I]q3[I,#] -> q3[I,I][I,#]
+Result replacement: [,_][I,I]q3[I,#][I,$][I,#][I,I][,_][,_] -> [,_]q3[I,I][I,#][I,$][I,#][I,I][,_][,_]
+
+Applied rule: q3[I,I] -> [I,#]q4
+Result replacement: [,_]q3[I,I][I,#][I,$][I,#][I,I][,_][,_] -> [,_][I,#]q4[I,#][I,$][I,#][I,I][,_][,_]
+
+Applied rule: q4[I,#] -> [I,#]q4
+Result replacement: [,_][I,#]q4[I,#][I,$][I,#][I,I][,_][,_] -> [,_][I,#][I,#]q4[I,$][I,#][I,I][,_][,_]
+
+Applied rule: q4[I,$] -> [I,$]q4
+Result replacement: [,_][I,#][I,#]q4[I,$][I,#][I,I][,_][,_] -> [,_][I,#][I,#][I,$]q4[I,#][I,I][,_][,_]
+
+Applied rule: q4[I,#] -> [I,#]q4
+Result replacement: [,_][I,#][I,#][I,$]q4[I,#][I,I][,_][,_] -> [,_][I,#][I,#][I,$][I,#]q4[I,I][,_][,_]
+
+Applied rule: [I,#]q4[I,I] -> q3[I,#][I,#]
+Result replacement: [,_][I,#][I,#][I,$][I,#]q4[I,I][,_][,_] -> [,_][I,#][I,#][I,$]q3[I,#][I,#][,_][,_]
+
+Applied rule: [I,$]q3[I,#] -> q3[I,$][I,#]
+Result replacement: [,_][I,#][I,#][I,$]q3[I,#][I,#][,_][,_] -> [,_][I,#][I,#]q3[I,$][I,#][I,#][,_][,_]
+
+Applied rule: [I,#]q3[I,$] -> q3[I,#][I,$]
+Result replacement: [,_][I,#][I,#]q3[I,$][I,#][I,#][,_][,_] -> [,_][I,#]q3[I,#][I,$][I,#][I,#][,_][,_]
+
+Applied rule: [I,#]q3[I,#] -> q3[I,#][I,#]
+Result replacement: [,_][I,#]q3[I,#][I,$][I,#][I,#][,_][,_] -> [,_]q3[I,#][I,#][I,$][I,#][I,#][,_][,_]
+
+Applied rule: [,_]q3[I,#] -> q3[,_][I,#]
+Result replacement: [,_]q3[I,#][I,#][I,$][I,#][I,#][,_][,_] -> q3[,_][I,#][I,#][I,$][I,#][I,#][,_][,_]
+
+Applied rule: q3[,_] -> [,_]q5
+Result replacement: q3[,_][I,#][I,#][I,$][I,#][I,#][,_][,_] -> [,_]q5[I,#][I,#][I,$][I,#][I,#][,_][,_]
+
+Applied rule: q5[I,#] -> [I,I]q5
+Result replacement: [,_]q5[I,#][I,#][I,$][I,#][I,#][,_][,_] -> [,_][I,I]q5[I,#][I,$][I,#][I,#][,_][,_]
+
+Applied rule: q5[I,#] -> [I,I]q5
+Result replacement: [,_][I,I]q5[I,#][I,$][I,#][I,#][,_][,_] -> [,_][I,I][I,I]q5[I,$][I,#][I,#][,_][,_]
+
+Applied rule: q5[I,$] -> [I,1]q5
+Result replacement: [,_][I,I][I,I]q5[I,$][I,#][I,#][,_][,_] -> [,_][I,I][I,I][I,1]q5[I,#][I,#][,_][,_]
+
+Applied rule: q5[I,#] -> [I,I]q5
+Result replacement: [,_][I,I][I,I][I,1]q5[I,#][I,#][,_][,_] -> [,_][I,I][I,I][I,1][I,I]q5[I,#][,_][,_]
+
+Applied rule: q5[I,#] -> [I,I]q5
+Result replacement: [,_][I,I][I,I][I,1][I,I]q5[I,#][,_][,_] -> [,_][I,I][I,I][I,1][I,I][I,I]q5[,_][,_]
+
+Applied rule: [I,I]q5[,_] -> q8[I,I][,_]
+Result replacement: [,_][I,I][I,I][I,1][I,I][I,I]q5[,_][,_] -> [,_][I,I][I,I][I,1][I,I]q8[I,I][,_][,_]
+
+Applied rule: [I,I]q8[I,I] -> q8[I,I][I,I]
+Result replacement: [,_][I,I][I,I][I,1][I,I]q8[I,I][,_][,_] -> [,_][I,I][I,I][I,1]q8[I,I][I,I][,_][,_]
+
+Applied rule: [I,1]q8[I,I] -> q8[I,1][I,I]
+Result replacement: [,_][I,I][I,I][I,1]q8[I,I][I,I][,_][,_] -> [,_][I,I][I,I]q8[I,1][I,I][I,I][,_][,_]
+
+Applied rule: q8[I,1] -> [I,I]q2
+Result replacement: [,_][I,I][I,I]q8[I,1][I,I][I,I][,_][,_] -> [,_][I,I][I,I][I,I]q2[I,I][I,I][,_][,_]
+
+Applied rule: [I,I]q2[I,I] -> q3[I,I][I,$]
+Result replacement: [,_][I,I][I,I][I,I]q2[I,I][I,I][,_][,_] -> [,_][I,I][I,I]q3[I,I][I,$][I,I][,_][,_]
+
+Applied rule: q3[I,I] -> [I,#]q4
+Result replacement: [,_][I,I][I,I]q3[I,I][I,$][I,I][,_][,_] -> [,_][I,I][I,I][I,#]q4[I,$][I,I][,_][,_]
+
+Applied rule: q4[I,$] -> [I,$]q4
+Result replacement: [,_][I,I][I,I][I,#]q4[I,$][I,I][,_][,_] -> [,_][I,I][I,I][I,#][I,$]q4[I,I][,_][,_]
+
+Applied rule: [I,$]q4[I,I] -> q3[I,$][I,#]
+Result replacement: [,_][I,I][I,I][I,#][I,$]q4[I,I][,_][,_] -> [,_][I,I][I,I][I,#]q3[I,$][I,#][,_][,_]
+
+Applied rule: [I,#]q3[I,$] -> q3[I,#][I,$]
+Result replacement: [,_][I,I][I,I][I,#]q3[I,$][I,#][,_][,_] -> [,_][I,I][I,I]q3[I,#][I,$][I,#][,_][,_]
+
+Applied rule: [I,I]q3[I,#] -> q3[I,I][I,#]
+Result replacement: [,_][I,I][I,I]q3[I,#][I,$][I,#][,_][,_] -> [,_][I,I]q3[I,I][I,#][I,$][I,#][,_][,_]
+
+Applied rule: q3[I,I] -> [I,#]q4
+Result replacement: [,_][I,I]q3[I,I][I,#][I,$][I,#][,_][,_] -> [,_][I,I][I,#]q4[I,#][I,$][I,#][,_][,_]
+
+Applied rule: q4[I,#] -> [I,#]q4
+Result replacement: [,_][I,I][I,#]q4[I,#][I,$][I,#][,_][,_] -> [,_][I,I][I,#][I,#]q4[I,$][I,#][,_][,_]
+
+Applied rule: q4[I,$] -> [I,$]q4
+Result replacement: [,_][I,I][I,#][I,#]q4[I,$][I,#][,_][,_] -> [,_][I,I][I,#][I,#][I,$]q4[I,#][,_][,_]
+
+Applied rule: q4[I,#] -> [I,#]q4
+Result replacement: [,_][I,I][I,#][I,#][I,$]q4[I,#][,_][,_] -> [,_][I,I][I,#][I,#][I,$][I,#]q4[,_][,_]
+
+Applied rule: [I,#]q4[,_] -> q8[I,#][,_]
+Result replacement: [,_][I,I][I,#][I,#][I,$][I,#]q4[,_][,_] -> [,_][I,I][I,#][I,#][I,$]q8[I,#][,_][,_]
+
+Applied rule: [I,$]q8[I,#] -> q8[I,$][I,I]
+Result replacement: [,_][I,I][I,#][I,#][I,$]q8[I,#][,_][,_] -> [,_][I,I][I,#][I,#]q8[I,$][I,I][,_][,_]
+
+Applied rule: [I,#]q8[I,$] -> q8[I,#][I,I]
+Result replacement: [,_][I,I][I,#][I,#]q8[I,$][I,I][,_][,_] -> [,_][I,I][I,#]q8[I,#][I,I][I,I][,_][,_]
+
+Applied rule: [I,#]q8[I,#] -> q8[I,#][I,I]
+Result replacement: [,_][I,I][I,#]q8[I,#][I,I][I,I][,_][,_] -> [,_][I,I]q8[I,#][I,I][I,I][I,I][,_][,_]
+
+Applied rule: [I,I]q8[I,#] -> q8[I,I][I,I]
+Result replacement: [,_][I,I]q8[I,#][I,I][I,I][I,I][,_][,_] -> [,_]q8[I,I][I,I][I,I][I,I][I,I][,_][,_]
+
+Applied rule: [,_]q8[I,I] -> q8[,_][I,I]
+Result replacement: [,_]q8[I,I][I,I][I,I][I,I][I,I][,_][,_] -> q8[,_][I,I][I,I][I,I][I,I][I,I][,_][,_]
+
+Applied rule: q8[,_] -> [,_]Ac
+Result replacement: q8[,_][I,I][I,I][I,I][I,I][I,I][,_][,_] -> [,_]Ac[I,I][I,I][I,I][I,I][I,I][,_][,_]
+
+Applied rule: [,_]Ac -> Ac
+Result replacement: [,_]Ac[I,I][I,I][I,I][I,I][I,I][,_][,_] -> Ac[I,I][I,I][I,I][I,I][I,I][,_][,_]
+
+Applied rule: Ac[I,I] -> AcIAc
+Result replacement: Ac[I,I][I,I][I,I][I,I][I,I][,_][,_] -> AcIAc[I,I][I,I][I,I][I,I][,_][,_]
+
+Applied rule: Ac[I,I] -> AcIAc
+Result replacement: AcIAc[I,I][I,I][I,I][I,I][,_][,_] -> AcIAcIAc[I,I][I,I][I,I][,_][,_]
+
+Applied rule: Ac[I,I] -> AcIAc
+Result replacement: AcIAcIAc[I,I][I,I][I,I][,_][,_] -> AcIAcIAcIAc[I,I][I,I][,_][,_]
+
+Applied rule: Ac[I,I] -> AcIAc
+Result replacement: AcIAcIAcIAc[I,I][I,I][,_][,_] -> AcIAcIAcIAcIAc[I,I][,_][,_]
+
+Applied rule: Ac[I,I] -> AcIAc
+Result replacement: AcIAcIAcIAcIAc[I,I][,_][,_] -> AcIAcIAcIAcIAcIAc[,_][,_]
+
+Applied rule: Ac[,_] -> Ac
+Result replacement: AcIAcIAcIAcIAcIAc[,_][,_] -> AcIAcIAcIAcIAcIAc[,_]
+
+Applied rule: Ac[,_] -> Ac
+Result replacement: AcIAcIAcIAcIAcIAc[,_] -> AcIAcIAcIAcIAcIAc
+
+Applied rule: Ac -> 
+Result replacement: AcIAcIAcIAcIAcIAc -> IIIII
+
+Applied rule: Word was applied
+Result replacement: IIIII -> 
+
