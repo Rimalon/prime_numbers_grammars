@@ -77,11 +77,11 @@ while q:
     derivation.append(word)
     if is_terminal:
         if inputNumber == len(word):
-            print(f'YES, {inputNumber} is prime\nCheck [prime_generator_result.txt] for full stack')
+            print(f'{inputNumber} is prime')
             printStack(derivation)
             exit(0)
         elif inputNumber < len(word):
-            print(f'NO, {inputNumber} is not prime.')
+            print(f'{inputNumber} is not prime.')
             exit(0)
         else:
             derivation = []

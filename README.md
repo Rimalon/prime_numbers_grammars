@@ -64,3 +64,8 @@ optional arguments:
   -n N                  Number to check
 ```
 File with word output is in prime_checker_result.txt file
+##### For prime numbers generating by CSG use:
+```
+python prime_generator.py <path_to_grammar> <number>
+```
+From "/LBA_generator" folder 
